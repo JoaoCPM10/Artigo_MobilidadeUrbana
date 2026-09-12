@@ -1,0 +1,105 @@
+{
+  "rede": {
+    "fonte": "OpenStreetMap (Overpass API)",
+    "bairro": "Urca, Rio de Janeiro",
+    "bbox": "-22.958,-43.171,-22.943,-43.155",
+    "pontos_osm": 319,
+    "vias_osm": 79,
+    "V_intersecoes": 60,
+    "E_arcos": 95,
+    "trechos": 89
+  },
+  "conectividade": {
+    "componentes": 1,
+    "maior_componente": 60,
+    "scc": 18,
+    "maior_scc": 37,
+    "fora_da_scc_gigante": 23,
+    "ruas_sem_saida": 5,
+    "tempo_ms": 1.47
+  },
+  "gargalos_estruturais": {
+    "articulacoes": 9,
+    "pontes": 9,
+    "tempo_ms": 9.81
+  },
+  "gargalos_estruturais_dirigidos": {
+    "nucleo_n": 37,
+    "pontes_fortes": 35,
+    "articulacoes_fortes": 28,
+    "pontes_fraca_e_forte": 6,
+    "pontes_so_forte": 29,
+    "pontes_so_fraca_fora_do_nucleo": 3,
+    "articulacoes_fraca_e_forte": 6,
+    "articulacoes_so_forte": 22,
+    "tempo_ms": 138.68
+  },
+  "gargalo_corte_minimo": {
+    "origem": 8843073457,
+    "destino": 187640667,
+    "fluxo_maximo": 1,
+    "corte_minimo": 1,
+    "ruas_do_corte": [
+      [
+        186319664,
+        186319672
+      ]
+    ],
+    "outros_pontos_unicos_de_falha_na_rota": [
+      [
+        186319672,
+        186314402
+      ],
+      [
+        671070124,
+        186310957
+      ]
+    ],
+    "tempo_ms": 0.76
+  },
+  "rotas_alternativas": {
+    "origem": 186317743,
+    "destino": 186319657,
+    "rota_principal_min": 2.77,
+    "intersecoes_rota": 11,
+    "bellman_ford_confere": true,
+    "tempo_dijkstra_ms": 0.15,
+    "tempo_bellman_ford_ms": 0.35,
+    "trecho_bloqueado": [
+      186323950,
+      366724452
+    ],
+    "rota_alternativa_min": 3.15,
+    "acrescimo_pct": 13.6,
+    "pontes_na_rota": 3
+  },
+  "resiliencia": {
+    "n_pares_nucleo": 1332,
+    "pontes_fortes": {
+      "n": 35,
+      "pares_desconectados": {
+        "min": 36,
+        "mediana": 138,
+        "max": 644
+      },
+      "binarias": 20,
+      "com_desvio_parcial": 15,
+      "n_pares_com_desvio_parcial": 1585,
+      "acrescimo_min": {
+        "min": 0.012165738841356225,
+        "mediana": 0.26810537799945944,
+        "max": 2.0844596645327065
+      }
+    },
+    "articulacoes_fortes": {
+      "n": 28,
+      "pares_desconectados": {
+        "min": 105,
+        "mediana": 219.0,
+        "max": 694
+      }
+    },
+    "tempo_ms": 3127.11
+  },
+  "tempo_total_s": 4.81
+}

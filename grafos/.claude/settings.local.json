@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(py --version)",
+      "Bash(where.exe python *)",
+      "Bash(where.exe py *)",
+      "Bash(where.exe python3 *)",
+      "Bash(py -c \"import matplotlib; print\\('matplotlib', matplotlib.__version__\\)\")",
+      "Bash(py -c \"import numpy; print\\('numpy', numpy.__version__\\)\")",
+      "Bash(py -c \"import networkx; print\\('networkx', networkx.__version__\\)\")",
+      "Bash(py -c ' *)",
+      "Bash(py main.py)",
+      "Bash(py -c \"import osmnx; print\\('osmnx', osmnx.__version__\\)\")",
+      "Bash(py make_pdf.py)",
+      "Bash(py -c \"import pypdf; print\\('paginas:', len\\(pypdf.PdfReader\\('relatorio.pdf'\\).pages\\)\\)\")",
+      "Bash(cd \"C:/Users/fernando.augusto/grafos/src\" && py main.py 2>&1 | tail -6 && cd .. && py make_pdf.py 2>&1 | tail -2 && echo \"===ARQUIVOS===\" && ls output/ && echo \"---\" && ls *.pdf *.md)",
+      "Bash(where.exe pdflatex *)",
+      "Bash(where.exe latexmk *)",
+      "Bash(where.exe xelatex *)",
+      "Bash(where.exe tectonic *)",
+      "Bash(echo \"=== ocorrencias de \\\\\\\\textbf ===\")"
+    ]
+  }
+}
