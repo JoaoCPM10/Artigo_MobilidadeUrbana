@@ -9,6 +9,7 @@ from __future__ import annotations
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.patches import FancyArrowPatch
 from matplotlib.collections import LineCollection
 
 # fontes maiores para boa leitura na impressao do artigo
@@ -55,12 +56,71 @@ def draw_base(data, ax, color="#c2c7d0", lw=1.0, node_color="#9aa3b2"):
 
 
 def fig_overview(data, path):
-    fig, ax = plt.subplots(figsize=(8.5, 8.5))
-    draw_base(data, ax)
+    """Mapa geral da rede, com o sentido de tráfego indicado.
+
+    A grande maioria dos trechos (83 de 89, cerca de 93%) é de mão única; os
+    6 trechos de mão dupla são destacados à parte porque, sozinhos, traçam o
+    corredor que liga as duas grades residenciais ao restante do bairro (o
+    mesmo corredor discutido na seção de corte mínimo).
+    """
     G = data["graph"]
-    ax.set_title(f"Bairro da Urca (RJ) — rede de ruas do OpenStreetMap\n"
+    arc_set = {(e.u, e.v) for e in G.edges}
+
+    oneway_fwd, oneway_bwd, twoway = [], [], []
+    for (u, v, length, geom) in data["undirected_edges"]:
+        fwd = (u, v) in arc_set
+        bwd = (v, u) in arc_set
+        if fwd and bwd:
+            twoway.append(geom)
+        elif fwd:
+            oneway_fwd.append(geom)
+        elif bwd:
+            oneway_bwd.append(geom)
+
+    fig, ax = plt.subplots(figsize=(8.5, 8.5))
+    COLOR_ONEWAY = "#4a5a78"
+    COLOR_TWOWAY = "#e6752f"
+
+    def midpoint_dir(geom, reversed_=False):
+        pts = list(reversed(geom)) if reversed_ else geom
+        i = max(1, min(len(pts) - 1, len(pts) // 2))
+        return pts[i - 1], pts[i]
+
+    segs_oneway = []
+    for geom in oneway_fwd + oneway_bwd:
+        segs_oneway.extend(zip(geom, geom[1:]))
+    ax.add_collection(LineCollection(segs_oneway, colors=COLOR_ONEWAY,
+                                      linewidths=1.1, zorder=2, alpha=0.85))
+    for geom in oneway_fwd:
+        a, b = midpoint_dir(geom, reversed_=False)
+        ax.add_patch(FancyArrowPatch(a, b, arrowstyle="-|>", mutation_scale=9,
+                                      color=COLOR_ONEWAY, lw=0, zorder=4))
+    for geom in oneway_bwd:
+        a, b = midpoint_dir(geom, reversed_=True)
+        ax.add_patch(FancyArrowPatch(a, b, arrowstyle="-|>", mutation_scale=9,
+                                      color=COLOR_ONEWAY, lw=0, zorder=4))
+
+    segs_twoway = []
+    for geom in twoway:
+        segs_twoway.extend(zip(geom, geom[1:]))
+    ax.add_collection(LineCollection(segs_twoway, colors=COLOR_TWOWAY,
+                                      linewidths=3.0, zorder=3))
+
+    xs = [c[0] for c in G.coords.values()]
+    ys = [c[1] for c in G.coords.values()]
+    ax.scatter(xs, ys, s=6, c="#9aa3b2", zorder=5)
+
+    n_oneway = len(oneway_fwd) + len(oneway_bwd)
+    ax.plot([], [], color=COLOR_ONEWAY, lw=1.5, marker=">", markersize=6,
+            label=f"mão única, sentido indicado ({n_oneway})")
+    ax.plot([], [], color=COLOR_TWOWAY, lw=3, label=f"mão dupla ({len(twoway)})")
+
+    ax.set_aspect("equal"); ax.margins(0.04)
+    ax.set_xticks([]); ax.set_yticks([])
+    ax.legend(loc="upper left", fontsize=11, framealpha=0.9)
+    ax.set_title(f"Bairro da Urca (RJ) — rede de ruas, com sentido de tráfego\n"
                  f"{G.n} interseções, {len(data['undirected_edges'])} trechos "
-                 f"(de {data['n_raw_nodes']} pontos OSM)")
+                 f"({n_oneway} mão única, {len(twoway)} mão dupla)")
     fig.tight_layout(); fig.savefig(path, dpi=130); plt.close(fig)
 
 
